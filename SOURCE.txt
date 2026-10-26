@@ -1,0 +1,7 @@
+Middagskollen – lokal Home Assistant-export
+Exporterad: 2026-10-25
+Bas: publicerad version 11, Git 10d68cf7543d6459b8351264172237bc6ffb6acb
+Lokala anpassningar: Node/SQLite-server, relativa URL:er för Ingress, avgränsad cachehantering, säkerhetskopiering.
+Ingen ändring eller publicering av den privata webbappen.
+
+Delningskopia: 2026-10-26. Startdata återställda till standardval; inga personliga säkerhetskopior, databaser eller kontaktuppgifter ingår.

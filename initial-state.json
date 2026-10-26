@@ -1,0 +1,33 @@
+{
+  "app": "middagskollen",
+  "version": 1,
+  "exportedAt": "2026-10-26",
+  "state": {
+    "budget": 1200,
+    "prices": {},
+    "people": 4,
+    "boxes": 2,
+    "diet": "Allt",
+    "excludeShellfish": true,
+    "maxFish": 1,
+    "pantry": [],
+    "plan": [
+      55,
+      147,
+      3,
+      7,
+      5,
+      9,
+      11
+    ],
+    "home": {},
+    "bought": {},
+    "toBuy": {},
+    "keptDays": {},
+    "extra": [],
+    "lidlMember": false,
+    "icaMember": false,
+    "includeStaples": false,
+    "selectionVersion": 1
+  }
+}
