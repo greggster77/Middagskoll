@@ -1,7 +1,8 @@
 'use strict';
 const MealRuntime=(()=>{
  const isServer=document.currentScript?.getAttribute('data-runtime')==='server';
- const KEY='middagskollen-html-v1';
+ const previewPath=typeof location!=='undefined'&&location.pathname.split('/').includes('preview');
+ const KEY=previewPath?'middagskollen-preview-v1':'middagskollen-html-v1';
  const result=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json; charset=utf-8'}});
  function readLocal(){
   const probe=KEY+':check';localStorage.setItem(probe,'1');localStorage.removeItem(probe);
