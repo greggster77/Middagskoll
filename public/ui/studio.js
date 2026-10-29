@@ -18,6 +18,8 @@ const Studio=(()=>{
   for(const {key,label} of FoodPreferences.options){$(key).checked=!!state[key];if(state[key])choices.push(label);}
   $('avoidSummary').textContent=choices.length===0?'Inget':choices.length===1?choices[0]:choices.length+' valda';
   $('excludeFish').checked=state.maxFish===0;
+  $('fishLimitField').hidden=state.maxFish===0;
+  $('maxFish').value=state.maxFish||lastFishLimit;
   $('peopleHelp').textContent=(state.people*7+state.boxes*5)+' portioner totalt';
   for(const el of document.querySelectorAll('[data-step-target]')){const input=$(el.dataset.stepTarget),v=Number(input.value)+Number(el.dataset.step);el.disabled=v<Number(input.min)||v>Number(input.max);}
  }
@@ -80,7 +82,7 @@ const Studio=(()=>{
   document.addEventListener('change',e=>{if(e.target.dataset.keep!==undefined)week();});
   document.addEventListener('click',e=>{for(const id of ['moreMenu','avoidMenu']){const menu=$(id);if(menu.open&&!menu.contains(e.target))menu.open=false;}});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('moreMenu').open=false;$('avoidMenu').open=false;}});
-  $('excludeFish').onchange=()=>{if($('excludeFish').checked&&state.maxFish>0)lastFishLimit=state.maxFish;setFoodPreferences({maxFish:$('excludeFish').checked?0:lastFishLimit||1});$('maxFish').value=state.maxFish;};
+  $('excludeFish').onchange=()=>{if($('excludeFish').checked&&state.maxFish>0)lastFishLimit=state.maxFish;setFoodPreferences({maxFish:$('excludeFish').checked?0:lastFishLimit||1});};
   $('dinnerOnly').onchange=()=>{bankLimit=24;bank();};$('pickerSearch').oninput=picker;$('closePicker').onclick=()=>$('dayPicker').close();
   $('selectAllShopping').onclick=()=>{for(const k of Object.keys(shoppingItems()))if(!state.home[k])state.toBuy[k]=true;for(const name of state.extra)state.toBuy['extra:'+name]=true;save();render();};
   $('extraForm').onsubmit=e=>{e.preventDefault();$('add').click();};

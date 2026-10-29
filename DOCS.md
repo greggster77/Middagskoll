@@ -70,6 +70,8 @@ Endast `public/` är åtkomlig via webben. Servern, startdata, testfiler, databa
 
 Menyn **Undvik** stöder även nötter och mandel (inklusive jord- och pinjenötter), ägg, mjölkprodukter, gluten, soja och lök (inklusive vitlök, purjo och gräslök). Valen filtrerar receptens ingrediensnamn och anteckningar och uppdaterar veckoplan, receptsökning och inköpsbehov. Valen sparas och följer med säkerhetskopior; äldre kopior har de nya bortvalen avstängda. En kombination utan passande middagar avvisas med ett meddelande och föregående val behålls.
 
+Fisk väljs bort med kryssrutan **Fisk**. Antalsvalet **Fiskmiddagar per vecka** visas bara när fisk är tillåten och innehåller Högst 1, Högst 2 och Obegränsat.
+
 Detta är matpreferenser, **inte allergifilter**. Sammansatta produkter och spår av allergener kan inte bedömas säkert från receptnamnen. Kontrollera alltid originalrecept och förpackningar. Recept med alternativa eller valfria ingredienser filtreras också när ett bortval matchar; appen skriver inte om originalrecept.
 
 ```sh

@@ -91,3 +91,25 @@ test('server accepts optional boolean preferences and rejects malformed values',
   for(const invalid of ['true',1,null,{}])assert(!validState({...state,[key]:invalid}),key);
  }
 });
+
+test('fish exclusion is separate from the weekly limit and hides the limit control',()=>{
+ const html=fs.readFileSync('public/index.html','utf8');
+ const select=html.match(/<select id="maxFish">([\s\S]*?)<\/select>/)[1];
+ assert(!select.includes('value="0"'));
+ for(const value of [1,2,7])assert(select.includes(`value="${value}"`));
+ const source=fs.readFileSync('public/ui/studio.js','utf8');
+ const summary=source.slice(source.indexOf(' function settingSummary()'),source.indexOf(' function statsHTML()'));
+ const nodes={};
+ const c=vm.createContext({
+  state:{people:4,boxes:2,maxFish:0},FoodPreferences:preferences,lastFishLimit:2,
+  $:id=>nodes[id]??={},document:{querySelectorAll:()=>[]}
+ });
+ vm.runInContext(summary+';settingSummary();',c);
+ assert.equal(nodes.excludeFish.checked,true);
+ assert.equal(nodes.fishLimitField.hidden,true);
+ assert.equal(nodes.maxFish.value,2);
+ vm.runInContext('state.maxFish=2;settingSummary();',c);
+ assert.equal(nodes.excludeFish.checked,false);
+ assert.equal(nodes.fishLimitField.hidden,false);
+ assert.equal(nodes.maxFish.value,2);
+});
