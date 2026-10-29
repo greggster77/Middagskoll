@@ -35,8 +35,8 @@
 @media(min-width:1100px){main,.header-inner{padding-left:46px;padding-right:46px}}h1{font-weight:500}.icon,.icon *{pointer-events:none}.buy-check{position:relative}.buy-check:after{content:'';position:absolute;inset:-10px -8px}@media(max-width:700px){.nav-item{min-height:40px}.stepper button{width:36px;min-height:36px}.category-chip{min-height:33px}.meal-actions .icon-button{width:35px;height:32px;min-height:32px}.keepmeal{min-height:24px;bottom:7px}.shop-row{grid-template-columns:17px minmax(0,1fr) 57px 34px}.home-choice{width:34px;height:36px;min-height:36px}}
 
 
-.prices-paused [data-tab="deals"],
-.prices-paused #deals,.prices-paused #budgetShop,
+.prices-paused [data-tab="budget"],.prices-paused [data-tab="deals"],
+.prices-paused #budget,.prices-paused #deals,.prices-paused #budgetShop,
 .prices-paused .meal-cost,.prices-paused .shopping-price,.prices-paused .shop-price{display:none!important}
 .prices-paused .budget-price.ica-offer{display:block}
 .prices-paused #weekStats{grid-template-columns:repeat(3,minmax(0,1fr))}

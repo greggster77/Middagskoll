@@ -75,7 +75,7 @@ $('clearAppSearch').onclick=clearRecipeQuery;$('clearRecipeSearch').onclick=clea
 $('moreRecipes').onclick=()=>{bankLimit+=24;renderBank();};
 $('assignButton').onclick=()=>{if(selectedRecipe===null)return;if(!canAssign(selectedRecipe,Number($('assignDay').value)))return;state.plan[Number($('assignDay').value)]=selectedRecipe;save();render();$('recipe').close();toast('Receptet är valt till veckan.');};
 renderBank();
-function selectTab(tab){if(tab==='deals')return;activeTab=tab;document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));['plan','shop','deals','bank','pasta','pantry','budget'].forEach(k=>$(k).hidden=k!==tab);if(typeof Studio!=='undefined'&&Studio.ready)Studio.tabChanged(tab);}
+function selectTab(tab){if(tab==='budget'||tab==='deals')return;activeTab=tab;document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));['plan','shop','deals','bank','pasta','pantry','budget'].forEach(k=>$(k).hidden=k!==tab);if(typeof Studio!=='undefined'&&Studio.ready)Studio.tabChanged(tab);}
 function canAssign(id,day){const r=DATA.recipes[id];if(!Food.isAllowed(r,state)){toast('Receptet passar inte dina matval.');return false;}const fish=state.plan.filter((x,d)=>d!==day&&DATA.recipes[x].cat==='Fisk').length;if(r.cat==='Fisk'&&fish>=state.maxFish){toast('Gränsen för fiskmiddagar är nådd. Ändra matvalet om du vill ha fler.');return false;}return true;}
 function updateMeatControls(){
  if(state.excludePork&&state.diet==='Fläskkött')state.diet='Allt';
