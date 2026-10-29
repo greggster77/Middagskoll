@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="ui/styles.css">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
-<body>
+<body class="prices-paused">
 <svg xmlns="http://www.w3.org/2000/svg" class="icon-sprite" aria-hidden="true">
 <defs>
 <symbol id="i-calendar" viewBox="0 0 24 24">
@@ -110,7 +110,7 @@
 </svg>
 <span>Inköpslista</span>
 </button>
-<button type="button" data-tab="budget" class="nav-item ">
+<button type="button" data-tab="budget" class="nav-item " hidden>
 <svg class="icon" aria-hidden="true">
 <use href="#i-wallet">
 </use>
@@ -132,7 +132,7 @@
 <use href="#i-pasta">
 </use>
 </svg>Pasta</button>
-<button type="button" data-tab="deals">
+<button type="button" data-tab="deals" hidden>
 <svg class="icon" aria-hidden="true">
 <use href="#i-tag">
 </use>
@@ -156,7 +156,7 @@
 <div>
 <div id="pageEyebrow" class="eyebrow">VECKANS MIDDAGAR</div>
 <h1 id="pageTitle">Veckans middagar</h1>
-<p id="pageDescription">Sju middagar som passar er, med färdig inköpslista och koll på matbudgeten.</p>
+<p id="pageDescription">Sju middagar som passar er, med färdig inköpslista.</p>
 <p id="syncStatus" class="sync-status" role="status" aria-live="polite">Hämtar dina sparade val …</p>
 <div class="sync-actions">
 <button id="reloadState" class="text-button" type="button" hidden>Hämta senaste val</button>
@@ -490,10 +490,10 @@
 </div>
 </section>
 <footer>500 recept från ICA, Köket.se och Arla.<br>
-<span id="storage">Veckoplan, inköpsval, budget och hemmalager sparas i den här webbläsaren.</span>
+<span id="storage">Veckoplan, inköpsval och hemmalager sparas i den här webbläsaren.</span>
 <details class="local-backup">
 <summary>Säkerhetskopia av dina val</summary>
-<p>Spara eller återställ veckoplan, budget, egna priser, inköpsval och hemmalager.</p>
+<p>Spara eller återställ veckoplan, matpreferenser, inköpsval och hemmalager. Tidigare budget- och prisinställningar bevaras i säkerhetskopian medan funktionen är pausad.</p>
 <div class="exportactions">
 <button id="exportBackup" type="button" class="secondary">Spara säkerhetskopia</button>
 <label class="backup-upload">Återställ säkerhetskopia<input id="importBackup" type="file" accept="application/json,.json">

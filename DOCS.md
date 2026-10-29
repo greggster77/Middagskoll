@@ -2,6 +2,8 @@
 
 ## Offentlig webbversion
 
+**Tillfällig paus:** Budget, priser och erbjudandevyn visas inte i appen. Veckoöversikten visar i stället antal rätter, portioner och varor. Inköpslistan visar mängder utan prisuppskattningar. Prisdata, kod och tidigare personliga prisinställningar behålls för en framtida återaktivering; säkerhetskopior förblir kompatibla. Detta gäller både webb- och serverversionen och har företräde framför äldre prisbeskrivningar nedan.
+
 Öppna **https://greggster77.github.io/Middagskoll/**. Inget konto eller Home Assistant behövs. Varje besökare har egna val i sin webbläsare; ingen gemensam hushållsdatabas används. Valen delas mellan flikar på samma webbplats, men inte mellan webbläsare eller enheter. Säkerhetskopiera för att flytta eller skydda dem innan webbläsardata rensas.
 
 Bygg webbversionen med Node.js 24 eller senare:

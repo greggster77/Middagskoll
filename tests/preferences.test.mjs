@@ -113,3 +113,21 @@ test('fish exclusion is separate from the weekly limit and hides the limit contr
  assert.equal(nodes.fishLimitField.hidden,false);
  assert.equal(nodes.maxFish.value,2);
 });
+
+test('paused prices do not appear in week cards or shopping summaries and stored prices remain intact',()=>{
+ vm.runInContext(fs.readFileSync('public/ui/layout-model.js','utf8'),context);
+ vm.runInContext(fs.readFileSync('public/ui/studio.js','utf8').replace('Studio.mount();',''),context);
+ const previous=run('JSON.stringify({budget:state.budget,prices:state.prices})');
+ run('Studio.summary();Studio.week();Studio.shop();');
+ for(const id of ['weekStats','days','shopping','shopStats','readySummary']){
+  assert(!/\bkr\b|kostnad|riktpris|budget|shop-price|meal-cost/i.test(nodes[id].innerHTML+' '+nodes[id].textContent),id);
+ }
+ assert(nodes.shopping.innerHTML.includes('shop-quantity'));
+ assert(nodes.shopStats.innerHTML.includes('ATT HANDLA'));
+ assert.equal(run('JSON.stringify({budget:state.budget,prices:state.prices})'),previous);
+ run('selectTab("budget");selectTab("deals");');
+ assert.equal(run('activeTab'),'plan');
+ const html=fs.readFileSync('public/index.html','utf8');
+ assert(/data-tab="budget"[^>]*hidden/.test(html));
+ assert(/data-tab="deals"[^>]*hidden/.test(html));
+});
