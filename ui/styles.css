@@ -35,9 +35,16 @@
 @media(min-width:1100px){main,.header-inner{padding-left:46px;padding-right:46px}}h1{font-weight:500}.icon,.icon *{pointer-events:none}.buy-check{position:relative}.buy-check:after{content:'';position:absolute;inset:-10px -8px}@media(max-width:700px){.nav-item{min-height:40px}.stepper button{width:36px;min-height:36px}.category-chip{min-height:33px}.meal-actions .icon-button{width:35px;height:32px;min-height:32px}.keepmeal{min-height:24px;bottom:7px}.shop-row{grid-template-columns:17px minmax(0,1fr) 57px 34px}.home-choice{width:34px;height:36px;min-height:36px}}
 
 
+.recipe-photo{margin:0 0 12px;min-width:0}
+.recipe-photo img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:10px}
+.recipe-photo figcaption{font:11px/1.5 Arial,sans-serif;color:var(--muted);margin-top:4px;text-align:left}
+.meal-card .recipe-photo{grid-column:1/-1;margin:4px 0 10px}
+.recipe-open .recipe-photo{width:100%}
+@media print{.recipe-photo{display:none!important}}
 .prices-paused [data-tab="budget"],.prices-paused [data-tab="deals"],
 .prices-paused #budget,.prices-paused #deals,.prices-paused #budgetShop,
 .prices-paused .meal-cost,.prices-paused .shopping-price,.prices-paused .shop-price{display:none!important}
+.prices-paused .budget-price.ica-offer{display:block}
 .prices-paused #weekStats{grid-template-columns:repeat(3,minmax(0,1fr))}
 .prices-paused .shop-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
 .prices-paused .shop-summary .stat-card:last-child{grid-column:auto}

@@ -198,7 +198,7 @@
 <p id="appSearchHelp" class="muted">Sök bland 500 recept. Dina val för fläskkött, fisk och skaldjur gäller även här.</p>
 </form>
 <section id="plan">
-<div id="weekStats" class="stats-grid" aria-label="Veckans kostnad och portioner">
+<div id="weekStats" class="stats-grid" aria-label="Veckans middagar, portioner och inköpslista">
 </div>
 <section class="settings plan-settings" aria-label="Dina matval">
 <div class="setting-cell">
@@ -478,11 +478,10 @@
 <label for="budgetLimit">Veckobudget, kr<input id="budgetLimit" type="number" inputmode="decimal" min="0" max="50000" step="0.01" value="1200">
 </label>
 </div>
-<h2>Budget och varupriser</h2>
-<p>Vanliga ingredienser får automatiskt riktpriser från sparade jämförelseprodukter hos Mathem. Du kan ändra varje pris. Dina egna priser har alltid företräde. Receptmängder, personer och matlådor räknas med automatiskt. Budgeten jämförs med inköpsbehovet efter avdrag för hemmalagret, oavsett ”Ska köpa”-markeringar.</p>
-<p class="muted">Riktpriserna är uppskattningar för matplanering, inte garanterade priser i din butik. Varje automatiskt pris har en länk till sin jämförelseprodukt. Dina ändringar sparas i det valda lagringsläget. Reklambladspriser visas separat under Erbjudanden. Inköpen räknas för den mängd som används; hela förpackningar kan kosta mer. Basvaror tas med när ”Visa även basvaror” är valt i inköpslistan.</p>
-<p class="muted">När mängden saknas i originalreceptet visas ett riktpris som hjälp, men du anger kostnaden för hela veckan själv. Även egna varor får ett veckobelopp. Justera dessa belopp själv när du ändrar portioner.</p>
-<label>Sök bland veckans varor<input id="priceSearch" type="search" placeholder="Till exempel pasta">
+<h2>ICA-erbjudanden som matchar</h2>
+<p>Här visas bara sparade erbjudanden från ICA Supermarket Älvängen som kan matcha veckans ingredienser. Priser från andra kedjor, Mathem-riktpriser och egna prisinställningar används inte.</p>
+<p class="muted">Kontrolldatum visas vid varje erbjudande. Om giltighetsdatum saknas behöver aktuellt pris och villkor kontrolleras hos ICA. Matchningen är vägledande och totalsumman lämnas tom tills fler ICA-priser kan verifieras.</p>
+<label>Sök bland ICA-erbjudanden<input id="priceSearch" type="search" placeholder="Till exempel lax">
 </label>
 <p id="priceCount" role="status">
 </p>
@@ -493,7 +492,7 @@
 <span id="storage">Veckoplan, inköpsval och hemmalager sparas i den här webbläsaren.</span>
 <details class="local-backup">
 <summary>Säkerhetskopia av dina val</summary>
-<p>Spara eller återställ veckoplan, matpreferenser, inköpsval och hemmalager. Tidigare budget- och prisinställningar bevaras i säkerhetskopian medan funktionen är pausad.</p>
+<p>Spara eller återställ veckoplan, matpreferenser, inköpsval och hemmalager. Tidigare budget- och prisinställningar bevaras i säkerhetskopian; de används inte för att räkna totalsumman i den nuvarande budgetvyn.</p>
 <div class="exportactions">
 <button id="exportBackup" type="button" class="secondary">Spara säkerhetskopia</button>
 <label class="backup-upload">Återställ säkerhetskopia<input id="importBackup" type="file" accept="application/json,.json">

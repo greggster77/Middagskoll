@@ -1,6 +1,17 @@
 'use strict';
 const Budget=(()=>{
  const validPrice=p=>typeof p==='number'&&Number.isFinite(p)&&p>=0&&p<=1000000;
+ const isIcaAlvangenOffer=offer=>{
+  if(!offer||offer.store!=='ica-alv'||typeof offer.name!=='string'||typeof offer.label!=='string')return false;
+  if(!(Number.isFinite(offer.unitPrice)&&offer.unitPrice>=0||Number.isFinite(offer.packPrice)&&offer.packPrice>=0))return false;
+  try{const source=new URL(offer.source);return source.protocol==='https:'&&source.hostname==='www.ica.se'&&source.pathname.endsWith('-1004553/');}catch{return false;}
+ };
+ function matchingIcaOffers(items,ingredients,offers,home={}){
+  return offers.filter(isIcaAlvangenOffer).map(offer=>({
+   offer,
+   keys:Object.keys(items).filter(key=>!home[key]&&ingredients[key]&&(items[key]===0||items[key]>0)&&Food.offerMatches(offer.name,ingredients[key]))
+  })).filter(match=>match.keys.length);
+ }
  function calculate(items,ingredients,s){
   const rows=Object.entries(items).filter(([k])=>s.includeStaples||!isStaple(ingredients[k].name)).map(([key,amount])=>{
    const item=ingredients[key],fixed=amount===0,reference=typeof PriceBook!=='undefined'?PriceBook.lookup(item):null,manual=validPrice(s.prices?.[key]),price=manual?s.prices[key]:!fixed&&!reference?.hint?reference?.value:undefined,need=s.home[key]?0:fixed?1:Food.remaining(s,key,amount),priced=validPrice(price);
@@ -12,24 +23,41 @@ const Budget=(()=>{
   const missingAmounts=rows.filter(r=>!r.priced&&r.need>0&&r.fixed&&!r.extra).length;
   return {rows,cost,purchase,missing,missingBuy,missingAmounts,automatic,remaining:s.budget-purchase,portions:s.people*7+s.boxes*5};
  }
- return {validPrice,calculate};
+ return {validPrice,calculate,matchingIcaOffers};
 })();
-function budgetResult(){return Budget.calculate(totals(),DATA.ingredients,state);}
-function renderBudgetSummary(){if(typeof Studio!=='undefined'&&Studio.ready){Studio.summary();return;}const b=budgetResult(),remaining=Math.abs(b.remaining),over=b.remaining<-.005;
- const missingText=b.missingBuy?[(b.missingBuy-b.missingAmounts)?(b.missingBuy-b.missingAmounts)+' poster saknar beräknad kostnad.':'',b.missingAmounts?b.missingAmounts+' ingredienser saknar exakt mängd. Ange veckobelopp under Budget.':'','Summan är ofullständig.'].filter(Boolean).join(' '):'Alla varor att handla har en beräknad kostnad.';
- const status=over?'Över budget med '+money(remaining):b.missingBuy?'Kvar till poster utan kostnad: '+money(remaining):'Kvar av budgeten: '+money(remaining);
- $('budgetSummary').innerHTML=`<div class="budget-heading"><strong>${status}</strong><button class="secondary" type="button" data-tab="budget">Ändra priser</button></div><div class="budget-stats"><div><span>Veckobudget</span><strong>${money(state.budget)}</strong></div><div><span>${b.missing?'Uppskattad delkostnad':'Uppskattad receptkostnad'}</span><strong>${money(b.cost)}</strong></div><div><span>${b.missingBuy?'Uppskattade inköp hittills':'Uppskattat inköp'}</span><strong>${money(b.purchase)}</strong></div></div><progress max="${Math.max(1,state.budget)}" value="${Math.max(0,Math.min(b.purchase,Math.max(1,state.budget)))}" aria-label="Angiven inköpskostnad av veckobudgeten"></progress><p class="muted">${missingText} ${b.automatic} varor har automatiska riktpriser från Mathem. Prisdatum visas under respektive vara i Budget. ${b.portions} portioner inklusive matlådor. Hemmalagret är avdraget från inköpen.</p>`;
- $('budgetSummary').classList.toggle('over-budget',over);
- $('budgetShop').textContent=(b.missingBuy?'Uppskattade inköp hittills: ':'Uppskattat inköp: ')+money(b.purchase)+' av '+money(state.budget)+(b.missingBuy?' · '+b.missingBuy+' poster saknar beräknad kostnad.':' · '+(over?'Över budget: ':'Kvar: ')+money(remaining))+ ' Riktpriser och dina egna priser; förpackningsavrundning ingår inte.';
+function currentOfferSnapshot(){return typeof currentOffers!=='undefined'?currentOffers:OFFER_DATA;}
+function neededIngredients(){
+ return Object.fromEntries(Object.entries(totals()).filter(([key,amount])=>
+  !state.home[key]&&(amount===0||Food.remaining(state,key,amount)>0)
+ ));
 }
-function priceSource(r){if(r.manual)return '<span class="price-badge">Ditt pris</span>';if(!r.reference)return '<span class="muted">Prisunderlag saknas – ange eget pris.</span>';const ref=r.reference,p=ref.product;return '<span class="price-badge">'+(r.fixed?'Riktpris finns, mängd saknas':'Automatiskt riktpris')+'</span><small>'+escape(p.name)+' · '+money(p.price)+' / '+p.size+' '+escape(p.unit)+(r.fixed?' · '+money(ref.value)+' / '+escape(ref.unit):'')+'<br>'+escape(ref.note)+'<br>Priskontrollerat: '+escape(ref.checked||'Datum saknas')+(ref.source==='matval'?' · hämtat via Matval':' · sparat riktpris')+'</small><a href="'+escape(p.url)+'" target="_blank" rel="noopener noreferrer">Priskälla: Mathem</a>'; }
-function shoppingPrice(key,q){if(state.home[key])return 'Finns hemma · inget inköp';const item=DATA.ingredients[key],own=Budget.validPrice(state.prices?.[key]),ref=typeof PriceBook!=='undefined'?PriceBook.lookup(item):null,price=own?state.prices[key]:ref&&!ref.hint?ref.value:undefined;if(!Budget.validPrice(price))return ref?.hint?'Mängd saknas för kostnadsberäkning':'Prisunderlag saknas';return (own?'Ditt pris: ':'Riktpris: ')+money(price)+' / '+(q===0?'vecka':item.unit)+' · '+money(price*(q===0?1:q))+' för mängden';}
-function renderBudget(){renderBudgetSummary();const b=budgetResult(),q=Food.norm($('priceSearch').value);$('priceCount').textContent=b.rows.filter(r=>r.priced).length+' av '+b.rows.length+' varor har beräknad kostnad.';
- $('priceRows').innerHTML=b.rows.filter(r=>!q||Food.norm(r.name).includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'sv')).map(r=>`<div class="budget-price"><div><strong>${escape(r.name)}</strong><small>${r.extra?'Egen vara':r.fixed?'Mängd enligt originalet':qty(r.key,r.amount)+' i veckans recept'}${r.need===0?' · Finns hemma':''}</small><div class="price-source">${priceSource(r)}</div>${r.reference&&!r.fixed?'<button class="secondary reset-price" type="button" data-price-reset="'+escape(r.key)+'" '+(r.manual?'':'hidden')+'>Använd riktpris</button>':''}</div><label>${r.fixed?'Veckobelopp, kr':'Pris, kr / '+escape(r.unit)}<input type="number" inputmode="decimal" min="0" max="1000000" step="0.01" placeholder="Saknas" value="${r.priced?r.price:''}" data-budget-price="${escape(r.key)}" aria-label="Pris för ${escape(r.name)} i ${escape(r.unit)}"></label></div>`).join('')||'<p>Ingen vara matchar sökningen.</p>';
- document.querySelectorAll('#priceRows input').forEach(el=>{el.oninput=handleBudgetPriceInput;el.onblur=()=>{if(el.value==='')renderBudget();};});
+function matchedIcaOffers(){
+ const snapshot=currentOfferSnapshot();
+ const offers=(snapshot.offers||[]).filter(offer=>(!offer.start||state.shopdate>=offer.start)&&(!offer.end||state.shopdate<=offer.end));
+ return Budget.matchingIcaOffers(neededIngredients(),DATA.ingredients,offers);
 }
-function handleBudgetPriceInput(e){const el=e.target,key=el.dataset.budgetPrice;if(!key)return;if(el.value===''){delete state.prices[key];}else{const n=Number(el.value);if(!el.checkValidity()||!Budget.validPrice(n))return;state.prices[key]=n;}save();renderBudgetSummary();const b=budgetResult();$('priceCount').textContent=b.rows.filter(r=>r.priced).length+' av '+b.rows.length+' varor har beräknad kostnad.';const row=b.rows.find(r=>r.key===key),card=el.closest('.budget-price');if(row&&card){card.querySelector('.price-source').innerHTML=priceSource(row);const reset=card.querySelector('[data-price-reset]');if(reset)reset.hidden=!row.manual;}}
-$('budget').addEventListener('click',e=>{const b=e.target.closest('[data-price-reset]');if(!b)return;delete state.prices[b.dataset.priceReset];save();render();});
+function renderBudgetSummary(){
+ const matches=matchedIcaOffers(),covered=new Set(matches.flatMap(match=>match.keys)),total=Object.keys(neededIngredients()).length;
+ const snapshot=currentOfferSnapshot(),checked=snapshot.checked||OFFER_DATA.checked;
+ const unknownDates=matches.some(match=>!match.offer.end);
+ $('budgetSummary').innerHTML=`<div class="budget-heading"><strong>Veckans kostnad kan inte summeras ännu</strong></div><div class="budget-stats"><div><span>Din veckobudget</span><strong>${money(state.budget)}</strong></div><div><span>Varor med ICA-erbjudande</span><strong>${covered.size} av ${total}</strong></div><div><span>Veckans inköp</span><strong aria-label="Inte tillgänglig">—</strong></div></div><p class="muted">Endast matchande erbjudanden från ICA Supermarket Älvängen visas. Övriga priser, egna prisinställningar och Mathem-riktpriser räknas inte in. Underlaget kontrollerades ${escape(checked)}${unknownDates?'; giltighetsdatum saknas för vissa erbjudanden':''}. Kontrollera aktuellt pris och villkor hos ICA. Ingen totalsumma eller jämförelse mot budgeten visas.</p>`;
+ $('budgetSummary').classList.remove('over-budget');
+ $('budgetShop').textContent='';
+}
+function renderBudget(){
+ const matches=matchedIcaOffers(),snapshot=currentOfferSnapshot(),checked=snapshot.checked||OFFER_DATA.checked;
+ const query=Food.norm($('priceSearch').value);
+ const keys=new Set(matches.flatMap(match=>match.keys));
+ $('priceCount').textContent=`${matches.length} ICA-erbjudanden matchar ${keys.size} varor i veckans inköpslista.`;
+ $('priceRows').innerHTML=matches.filter(({offer,keys:matchedKeys})=>!query||Food.norm(offer.name).includes(query)||matchedKeys.some(key=>Food.norm(DATA.ingredients[key].name).includes(query))).map(({offer,keys:matchedKeys})=>{
+  const matchedNames=matchedKeys.map(key=>DATA.ingredients[key].name);
+  const validity=offer.start&&offer.end?`Gäller ${offer.start}–${offer.end}`:offer.end?`Gäller till ${offer.end}`:'Giltighetsdatum saknas';
+  let source='https://www.ica.se/';
+  try{const candidate=new URL(offer.source);if(candidate.protocol==='https:'&&candidate.hostname==='www.ica.se')source=candidate.href;}catch{}
+  return `<article class="budget-price ica-offer"><div><strong>${escape(offer.name)}</strong><small>Matchar veckans vara${matchedNames.length===1?'':'or'}: ${matchedNames.map(escape).join(', ')}</small><div class="price-source"><span class="price-badge">ICA Supermarket Älvängen · ${escape(offer.label||'Pris saknas')}</span><small>Kontrollerat ${escape(checked)} · ${escape(validity)}. Kontrollera aktuellt pris och villkor.</small>${offer.note?'<small>'+escape(offer.note)+'</small>':''}</div><a href="${escape(source)}" target="_blank" rel="noopener noreferrer">Kontrollera erbjudandet hos ICA</a></div></article>`;
+ }).join('')||'<p>Inga ICA-erbjudanden matchar veckans inköpslista.</p>';
+ renderBudgetSummary();
+}
 $('priceSearch').oninput=renderBudget;
 $('budgetLimit').addEventListener('input',e=>{if(e.target.value===''||!e.target.checkValidity())return;const n=Number(e.target.value);if(!Number.isFinite(n)||n<0||n>50000)return;state.budget=n;save();renderBudgetSummary();});
 

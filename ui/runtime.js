@@ -1,7 +1,8 @@
 'use strict';
 const MealRuntime=(()=>{
  const isServer=document.currentScript?.getAttribute('data-runtime')==='server';
- const KEY='middagskollen-html-v1';
+ const previewPath=typeof location!=='undefined'&&location.pathname.split('/').includes('preview');
+ const KEY=previewPath?'middagskollen-preview-v1':'middagskollen-html-v1';
  const result=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json; charset=utf-8'}});
  function readLocal(){
   const probe=KEY+':check';localStorage.setItem(probe,'1');localStorage.removeItem(probe);
@@ -49,7 +50,7 @@ const MealRuntime=(()=>{
  const storage=document.getElementById('storage');
  if(storage)storage.textContent=isServer?'Veckoplan, inköpsval och hemmalager sparas på den lokala servern.':'Dina val sparas bara i den här webbläsaren, utan konto eller synkning mellan enheter. Rensad webbläsardata kan ta bort dem. Spara en säkerhetskopia nedan.';
  // The validator below is generated from the same validation as the local server.
- function validLocalState(s){return s&&typeof s==='object'&&['excludeShellfish','excludePork','excludeNuts','excludeEggs','excludeDairy','excludeGluten','excludeSoy','excludeOnion'].every(k=>s[k]===undefined||typeof s[k]==='boolean')&&(s.budget===undefined||Number.isFinite(s.budget)&&s.budget>=0&&s.budget<=50000)&&(s.prices===undefined||s.prices&&typeof s.prices==='object'&&!Array.isArray(s.prices)&&Object.keys(s.prices).length<=5000&&Object.entries(s.prices).every(([k,v])=>k.length<=250&&Number.isFinite(v)&&v>=0&&v<=1000000))&&Number.isInteger(s.people)&&s.people>=1&&s.people<=6&&Number.isInteger(s.boxes)&&s.boxes>=0&&s.boxes<=6&&Array.isArray(s.plan)&&s.plan.length===7&&s.plan.every(id=>Number.isInteger(id)&&id>=0&&id<500)&&Array.isArray(s.pantry)&&s.pantry.length<=1000&&s.pantry.every(x=>typeof x.name==='string'&&x.name.length<=160&&typeof x.key==='string'&&x.key.length<=250&&Number.isFinite(x.amount)&&x.amount>0&&x.amount<=100000);}
+ function validLocalState(s){return s&&typeof s==='object'&&['excludeShellfish','excludePork','excludeNuts','excludeEggs','excludeDairy','excludeGluten','excludeSoy','excludeOnion'].every(k=>s[k]===undefined||typeof s[k]==='boolean')&&(s.budget===undefined||Number.isFinite(s.budget)&&s.budget>=0&&s.budget<=50000)&&(s.prices===undefined||s.prices&&typeof s.prices==='object'&&!Array.isArray(s.prices)&&Object.keys(s.prices).length<=5000&&Object.entries(s.prices).every(([k,v])=>k.length<=250&&Number.isFinite(v)&&v>=0&&v<=1000000))&&Number.isInteger(s.people)&&s.people>=1&&s.people<=6&&Number.isInteger(s.boxes)&&s.boxes>=0&&s.boxes<=6&&Array.isArray(s.plan)&&s.plan.length===7&&s.plan.every(id=>Number.isInteger(id)&&id>=0&&id<600)&&Array.isArray(s.pantry)&&s.pantry.length<=1000&&s.pantry.every(x=>typeof x.name==='string'&&x.name.length<=160&&typeof x.key==='string'&&x.key.length<=250&&Number.isFinite(x.amount)&&x.amount>0&&x.amount<=100000);}
  return{isServer,key:KEY,fetch:request};
 })();
 const mealFetch=(...args)=>MealRuntime.fetch(...args);
