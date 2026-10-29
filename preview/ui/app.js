@@ -6,6 +6,16 @@ if(!state.selectionVersion){state.toBuy={...state.bought};state.selectionVersion
 if(!state.keptDays||typeof state.keptDays!=='object')state.keptDays={};
 function save(){if(typeof queueSave==='function')queueSave();}
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function recipePhoto(r){
+ if(!r.image)return '';
+ return '<figure class="recipe-photo"><img src="'+escape(r.image)+'" alt="'+escape(r.name)+'" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption>Bild: '+escape(r.source)+'</figcaption></figure>';
+}
+document.addEventListener('error',event=>{
+ const image=event.target;
+ if(image.tagName!=='IMG'||!image.closest('.recipe-photo'))return;
+ image.hidden=true;
+ image.closest('.recipe-photo').querySelector('figcaption').textContent='Bilden kunde inte laddas · '+image.alt;
+},true);
 function portions(day){return state.people+(day<5?state.boxes:0);}
 function pool(){return DATA.recipes.filter(r=>r.isDinner&&!r.quantityWarning&&Food.isAllowed(r,state)&&Food.matchesCategory(r,state.diet));}
 function totals(){return Food.needItems(DATA,state);}
@@ -45,7 +55,7 @@ $('refreshOffers').onclick=refreshOffers;$('dealDay').onchange=()=>{dealDay=Numb
 ['lidlMember','icaMember'].forEach(k=>{$(k).checked=!!state[k];$(k).onchange=()=>{state[k]=$(k).checked;save();renderDeals();};});$('shopdate').value=state.shopdate;$('shopdate').onchange=()=>{if($('shopdate').value){state.shopdate=$('shopdate').value;save();renderDeals();}};
 function showRecipe(id,p,canAssign){
  const r=DATA.recipes[id];selectedRecipe=id;
- $('recipebody').innerHTML=`<span class="eyebrow">${escape(r.cat)} · ${escape(r.source)}</span><h2>${escape(r.name)}</h2>${r.image?`<img class="mealimage" src="${escape(r.image)}" alt="${escape(r.name)}">`:''}<label>Portioner<input id="recipePortions" type="number" min="1" max="12" value="${p}"></label>${r.quantityWarning?'<p class="warning">Källan saknar enhet för en ingrediens. Den skalas inte automatiskt; kontrollera originalet.</p>':''}<p>Grundrecept: ${r.servings} portioner. ${escape(r.timeLabel)}</p><h3>Ingredienser för ${p} portioner</h3><ul>${r.ingredientFacts.map(i=>`<li>${i.amount==null?'Kontrollera mängd i originalet':Number((i.amount*p/r.servings).toFixed(2)).toLocaleString('sv-SE')+' '+escape(i.unit)} ${escape(i.name)}${i.note?' ('+escape(i.note)+')':''}</li>`).join('')}</ul><h3>Tillbehör från Middagskollen</h3><p>${Math.round(.15*p/4*1000)} g grönsallad och ${Math.round(.2*p/4*1000)} g gurka, utöver originalreceptet.</p><a class="originalrecipe" href="${r.url}" target="_blank" rel="noopener noreferrer">Öppna hela receptet hos ${escape(r.source)}</a><button id="saveRecipeSource" class="secondary recipe-note" type="button">Spara recept och källa i Anteckningar</button><p class="muted">Tillagningsbeskrivningen finns hos originalkällan. Kontrollera där även mängder för tillval och alternativa ingredienser. Mängder är skalade matematiskt; styckvaror kan behöva avrundas vid inköp.</p>`;
+ $('recipebody').innerHTML=`<span class="eyebrow">${escape(r.cat)} · ${escape(r.source)}</span><h2>${escape(r.name)}</h2>${recipePhoto(r)}<label>Portioner<input id="recipePortions" type="number" min="1" max="12" value="${p}"></label>${r.quantityWarning?'<p class="warning">Källan saknar enhet för en ingrediens. Den skalas inte automatiskt; kontrollera originalet.</p>':''}<p>Grundrecept: ${r.servings} portioner. ${escape(r.timeLabel)}</p><h3>Ingredienser för ${p} portioner</h3><ul>${r.ingredientFacts.map(i=>`<li>${i.amount==null?'Kontrollera mängd i originalet':Number((i.amount*p/r.servings).toFixed(2)).toLocaleString('sv-SE')+' '+escape(i.unit)} ${escape(i.name)}${i.note?' ('+escape(i.note)+')':''}</li>`).join('')}</ul><h3>Tillbehör från Middagskollen</h3><p>${Math.round(.15*p/4*1000)} g grönsallad och ${Math.round(.2*p/4*1000)} g gurka, utöver originalreceptet.</p><a class="originalrecipe" href="${r.url}" target="_blank" rel="noopener noreferrer">Öppna hela receptet hos ${escape(r.source)}</a><button id="saveRecipeSource" class="secondary recipe-note" type="button">Spara recept och källa i Anteckningar</button><p class="muted">Tillagningsbeskrivningen finns hos originalkällan. Kontrollera där även mängder för tillval och alternativa ingredienser. Mängder är skalade matematiskt; styckvaror kan behöva avrundas vid inköp.</p>`;
  $('assignRecipe').hidden=!canAssign;if(!$('recipe').open)$('recipe').showModal();$('recipePortions').onchange=e=>{const v=Number(e.target.value);if(Number.isInteger(v)&&v>=1&&v<=12)showRecipe(id,v,canAssign);};$('saveRecipeSource').onclick=()=>shareRecipeSource(r,p);
 }
 async function shareRecipeSource(r,p){
