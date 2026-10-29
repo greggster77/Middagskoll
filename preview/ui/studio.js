@@ -23,14 +23,14 @@ const Studio=(()=>{
   for(const el of document.querySelectorAll('[data-step-target]')){const input=$(el.dataset.stepTarget),v=Number(input.value)+Number(el.dataset.step);el.disabled=v<Number(input.min)||v>Number(input.max);}
  }
  function statsHTML(){
-  const count=Object.keys(shoppingItems()).filter(k=>!state.home[k]).length+state.extra.length;
+  const count=shoppingRows().filter(row=>!row.home).length+state.extra.length;
   return '<article class="stat-card"><span class="stat-label">VECKANS MIDDAGAR</span><strong>'+state.plan.length+' rätter</strong><small>Planerat för hela veckan</small></article>'+
    '<article class="stat-card"><span class="stat-label">PORTIONER</span><strong>'+(state.people*7+state.boxes*5)+'</strong><small>Inklusive matlådor</small></article>'+
    '<article class="stat-card"><span class="stat-label">ATT HANDLA</span><strong>'+count+' varor</strong><small>Samlat i inköpslistan</small></article>';
  }
  function summary(){
   $('weekStats').innerHTML=statsHTML();$('budgetShop').textContent='';
-  const count=Object.keys(shoppingItems()).filter(k=>!state.home[k]).length+state.extra.length;
+  const count=shoppingRows().filter(row=>!row.home).length+state.extra.length;
   $('readySummary').textContent=count+' varor att handla';
   settingSummary();
  }
@@ -54,12 +54,11 @@ const Studio=(()=>{
  }
  function pasta(){const found=RecipeSearch.find(DATA.recipes.filter(r=>r.pasta&&Food.isAllowed(r,state)),$('pastaSearch').value);$('pastaCount').textContent=found.length+' pastarätter';$('pastaresults').innerHTML=bankCards(found)||'<p class="empty-state">Inga pastarätter matchar dina matval.</p>';}
  function shop(){
-  const items=shoppingItems();
-  const entries=Object.entries(items),groups=[...new Set(entries.map(([k])=>DATA.ingredients[k].group))];
+  const entries=shoppingRows(),groups=[...new Set(entries.map(row=>row.group))];
   const order=['Grönt','Kött & fisk','Kylvaror','Skafferi'];groups.sort((a,b)=>(order.indexOf(a)<0?99:order.indexOf(a))-(order.indexOf(b)<0?99:order.indexOf(b)));
-  const row=(key,name,quantity,extraIndex=null)=>{const home=!!state.home[key],selected=!!state.toBuy[key];return '<div class="row shop-row '+(selected?'selectedbuy ':'')+(home?'is-home':'')+'"><label class="buy-check"><input type="checkbox" '+(extraIndex===null?'data-to-buy="'+escape(key)+'"':'data-extra-buy="'+extraIndex+'"')+' '+(selected?'checked':'')+' '+(home?'disabled':'')+'><span class="sr-only">Ska köpa '+escape(name)+'</span></label><div class="item"><strong>'+escape(name)+'</strong></div><span class="shop-quantity">'+escape(quantity)+(home?' · Hemma':'')+'</span>'+(extraIndex===null?'<label class="home-choice '+(home?'is-active':'')+'"><input type="checkbox" data-home="'+escape(key)+'" '+(home?'checked':'')+'><span class="sr-only">Har hemma '+escape(name)+'</span>'+icon('home')+'</label>':'<button type="button" class="icon-button" data-remove="'+extraIndex+'" aria-label="Ta bort '+escape(name)+'">'+icon('trash')+'</button>')+'</div>';};
-  $('shopping').innerHTML=groups.map((g,i)=>{const group=entries.filter(([k])=>DATA.ingredients[k].group===g).sort(([a],[b])=>DATA.ingredients[a].name.localeCompare(DATA.ingredients[b].name,'sv'));return '<section class="shopping-category"><div class="category-head"><h3>'+escape(g==='Grönt'?'Grönt & frukt':g)+'</h3><span>'+group.length+' varor</span></div>'+group.map(([k,q])=>row(k,DATA.ingredients[k].name,q===0?'Enligt recept':qty(k,q))).join('')+'</section>';}).join('')+(state.extra.length?'<section class="shopping-category"><div class="category-head"><h3>Övrigt – egna varor</h3><span>'+state.extra.length+' varor</span></div>'+state.extra.map((name,i)=>row('extra:'+name,name,'',i)).join('')+'</section>':'');
-  const available=entries.filter(([k])=>!state.home[k]).map(([k])=>k).concat(state.extra.map(n=>'extra:'+n)),selected=available.filter(k=>state.toBuy[k]).length;
+  const row=(key,name,quantity,extraIndex=null,home=!!state.home[key],selected=!!state.toBuy[key])=>{return '<div class="row shop-row '+(selected?'selectedbuy ':'')+(home?'is-home':'')+'"><label class="buy-check"><input type="checkbox" '+(extraIndex===null?'data-to-buy="'+escape(key)+'"':'data-extra-buy="'+extraIndex+'"')+' '+(selected?'checked':'')+' '+(home?'disabled':'')+'><span class="sr-only">Ska köpa '+escape(name)+'</span></label><div class="item"><strong>'+escape(name)+'</strong></div><span class="shop-quantity">'+escape(quantity)+(home?' · Hemma':'')+'</span>'+(extraIndex===null?'<label class="home-choice '+(home?'is-active':'')+'"><input type="checkbox" data-home="'+escape(key)+'" '+(home?'checked':'')+'><span class="sr-only">Har hemma '+escape(name)+'</span>'+icon('home')+'</label>':'<button type="button" class="icon-button" data-remove="'+extraIndex+'" aria-label="Ta bort '+escape(name)+'">'+icon('trash')+'</button>')+'</div>';};
+  $('shopping').innerHTML=groups.map(g=>{const group=entries.filter(row=>row.group===g).sort((a,b)=>a.name.localeCompare(b.name,'sv'));return '<section class="shopping-category"><div class="category-head"><h3>'+escape(g==='Grönt'?'Grönt & frukt':g)+'</h3><span>'+group.length+' varor</span></div>'+group.map(r=>row(r.key,r.name,r.quantity,null,r.home,r.selected)).join('')+'</section>';}).join('')+(state.extra.length?'<section class="shopping-category"><div class="category-head"><h3>Övrigt – egna varor</h3><span>'+state.extra.length+' varor</span></div>'+state.extra.map((name,i)=>row('extra:'+name,name,'',i)).join('')+'</section>':'');
+  const available=entries.filter(row=>!row.home).concat(state.extra.map(name=>({selected:!!state.toBuy['extra:'+name]}))),selected=available.filter(row=>row.selected).length;
   const percentage=available.length?Math.round(selected/available.length*100):0;
   $('shopStats').innerHTML='<article class="stat-card"><span class="stat-label">ATT HANDLA</span><strong>'+available.length+' varor</strong><small>'+selected+' markerade till delning</small></article><article class="stat-card"><span class="stat-label">VALDA TILL INKÖPSLISTAN</span><progress max="100" value="'+percentage+'" aria-label="Andel varor markerade till delning"></progress><small>'+percentage+'% markerat</small></article>';
  }
