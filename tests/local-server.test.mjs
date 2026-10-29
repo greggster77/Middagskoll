@@ -7,7 +7,7 @@ import {once} from 'node:events';
 import {createApp,supervisorPeer,writeOrigin} from '../server.mjs';
 import {handleAPI} from '../worker/index.js';
 
-const state={people:4,boxes:2,plan:[55,147,3,7,5,9,11],pantry:[{key:'food:pasta:kg',name:'Pasta',amount:.5}],budget:1550,prices:{'food:pasta:kg':42,'extra:Kaffe':79},extra:['Kaffe'],home:{gurka:true},toBuy:{'extra:Kaffe':true},keptDays:{0:true},excludeShellfish:true,maxFish:1};
+const state={people:4,boxes:2,plan:[55,147,3,7,5,9,11],pantry:[{key:'food:pasta:kg',name:'Pasta',amount:.5}],budget:1550,prices:{'food:pasta:kg':42,'extra:Kaffe':79},extra:['Kaffe'],home:{gurka:true},toBuy:{'extra:Kaffe':true},keptDays:{0:true},excludeShellfish:true,excludeNuts:true,excludeEggs:false,excludeDairy:true,excludeGluten:false,excludeSoy:true,excludeOnion:false,maxFish:1};
 async function start(options){const server=createApp({seedFile:null,...options});server.listen(0,'127.0.0.1');await once(server,'listening');return{server,url:'http://127.0.0.1:'+server.address().port};}
 async function stop(server){await new Promise(resolve=>server.close(resolve));}
 const put=(url,s,revision=0,headers={})=>fetch(url+'/api/state',{method:'PUT',headers:{'Content-Type':'application/json','X-Middagskollen':'1',Origin:url,...headers},body:JSON.stringify({state:s,revision})});
@@ -33,8 +33,15 @@ test('relative client files and APIs work under a simulated changing Ingress pre
  const app=await start({dataDir,preview:true,api});
  try{
   const base=app.url+'/__qa/ingress/';
-  const html=await(await fetch(base)).text();
+  const response=await fetch(base),html=await response.text();
   assert(html.includes('id="appSearch"'));assert(html.includes('id="budgetLimit"'));
+  assert(response.headers.get('Content-Security-Policy').includes("script-src 'self';"));
+  const scripts=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+  assert.equal(scripts.length,19);
+  for(const [,attributes,body] of scripts){assert(/\bsrc="ui\/[^"]+\.js"/.test(attributes));assert.equal(body.trim(),'');}
+  assert(scripts[0][1].includes('src="ui/runtime.js"'));
+  assert(scripts[0][1].includes('data-runtime="server"'));
+  assert(html.includes('href="ui/styles.css"'));
   for(const match of html.matchAll(/(?:src|href)="([^"#]+)"/g)){
    if(/^(?:data:|https?:)/.test(match[1]))continue;
    assert(!match[1].startsWith('/'),match[1]);
@@ -45,7 +52,7 @@ test('relative client files and APIs work under a simulated changing Ingress pre
   assert.equal((await fetch(base+'api/offers')).status,200);
   assert(called.includes('/api/product'));assert(called.includes('/api/offers'));
   for(const file of ['app.js','pantry.js','sync.js','local-backup.js'])assert(!/fetch\(['"]\//.test(fs.readFileSync('public/'+file,'utf8')),file);
-  for(const file of ['server.mjs','initial-state.json','data/middagskollen.sqlite','.env','package.json','worker/index.js'])assert.equal((await fetch(app.url+'/'+file)).status,404,file);
+  for(const file of ['server.mjs','initial-state.json','data/middagskollen.sqlite','.env','package.json','worker/index.js','archive/indexfil.html','licenses/ZXing-library.txt','tests/local-server.test.mjs','src/schema.ts'])assert.equal((await fetch(app.url+'/'+file)).status,404,file);
  }finally{await stop(app.server);fs.rmSync(dataDir,{recursive:true,force:true});}
 });
 

@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="sv">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#2c4b40">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Middagskollen</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23143e35'/%3E%3Ctext x='8' y='29' font-size='27' fill='white'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="ui/styles.css">
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon-sprite" aria-hidden="true">
+<defs>
+<symbol id="i-calendar" viewBox="0 0 24 24">
+<path d="M8 2v4m8-4v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2M7 14h2m3 0h2m3 0h1M7 17h2m3 0h2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-book" viewBox="0 0 24 24">
+<path d="M12 5C9 3 5 3 2 4v15c3-1 7-1 10 1m0-15c3-2 7-2 10-1v15c-3-1-7-1-10 1V5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-basket" viewBox="0 0 24 24">
+<path d="m5 10 7-8 7 8M2 10h20l-3 11H5L2 10m6 3 1 5m7-5-1 5m-3-5v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24">
+<path d="M20 7V4H4v16h17V8H4m12 4h6v5h-6v-5m2 2h1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24">
+<path d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 12-1l2 3M4 15l2 3a7 7 0 0 0 12-1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-search" viewBox="0 0 24 24">
+<path d="M21 21l-6-6m3-6a7 7 0 1 1-14 0 7 7 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24">
+<path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-users" viewBox="0 0 24 24">
+<path d="M16 21v-3a4 4 0 0 0-8 0v3M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8m8 6a3 3 0 0 1-1 6m2 6v-3a3 3 0 0 0-2-3M4 9a3 3 0 0 0 1 6m-2 6v-3a3 3 0 0 1 2-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-clock" viewBox="0 0 24 24">
+<path d="M12 6v6l4 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-home" viewBox="0 0 24 24">
+<path d="M3 10 12 2l9 8v11h-6v-7H9v7H3V10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-mail" viewBox="0 0 24 24">
+<path d="M2 5h20v14H2V5m0 0 10 8L22 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-trash" viewBox="0 0 24 24">
+<path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-chevron" viewBox="0 0 24 24">
+<path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-more" viewBox="0 0 24 24">
+<path d="M5 12h1m6 0h1m6 0h1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-camera" viewBox="0 0 24 24">
+<path d="M3 6h4l2-3h6l2 3h4v15H3V6m14 7a5 5 0 1 1-10 0 5 5 0 0 1 10 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-box" viewBox="0 0 24 24">
+<path d="m3 7 9-4 9 4-9 4-9-4m0 0v11l9 4 9-4V7M12 11v11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-tag" viewBox="0 0 24 24">
+<path d="M3 3h8l10 10-8 8L3 11V3m4 4h1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-pasta" viewBox="0 0 24 24">
+<path d="M5 2v8m3-8v8m3-8v8M5 6h6M8 10v12M19 2c-3 4-3 8 0 10v10m0-20v10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-close" viewBox="0 0 24 24">
+<path d="m6 6 12 12M6 18 18 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-cutlery" viewBox="0 0 24 24">
+<path d="m4 2 8 8m-9-5 6 6m-7-3 6 6m0 0 12 10M20 2c-6 2-8 6-5 9l-3 3m5-5 5-5M2 22 10 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="i-pin" viewBox="0 0 24 24">
+<path d="m9 3 9 9m-7-7-6 6 8 8 6-6M5 19l-3 3m5-7 2-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+</defs>
+</svg>
+<header class="site-header">
+<div class="header-inner">
+<button class="brand" type="button" data-tab="plan">
+<span class="brand-mark">
+<svg class="icon" aria-hidden="true">
+<use href="#i-cutlery">
+</use>
+</svg>
+</span>Middagskollen</button>
+<nav class="primary-nav" aria-label="Huvudmeny">
+<button type="button" data-tab="plan" class="nav-item active">
+<svg class="icon" aria-hidden="true">
+<use href="#i-calendar">
+</use>
+</svg>
+<span>Veckoplan</span>
+</button>
+<button type="button" data-tab="bank" class="nav-item ">
+<svg class="icon" aria-hidden="true">
+<use href="#i-book">
+</use>
+</svg>
+<span>Recept</span>
+</button>
+<button type="button" data-tab="shop" class="nav-item ">
+<svg class="icon" aria-hidden="true">
+<use href="#i-basket">
+</use>
+</svg>
+<span>Inköpslista</span>
+</button>
+<button type="button" data-tab="budget" class="nav-item ">
+<svg class="icon" aria-hidden="true">
+<use href="#i-wallet">
+</use>
+</svg>
+<span>Budget</span>
+</button>
+</nav>
+<details id="moreMenu" class="more-menu">
+<summary aria-label="Fler funktioner">
+<svg class="icon" aria-hidden="true">
+<use href="#i-more">
+</use>
+</svg>
+<span>Mer</span>
+</summary>
+<div class="more-panel">
+<button type="button" data-tab="pasta">
+<svg class="icon" aria-hidden="true">
+<use href="#i-pasta">
+</use>
+</svg>Pasta</button>
+<button type="button" data-tab="deals">
+<svg class="icon" aria-hidden="true">
+<use href="#i-tag">
+</use>
+</svg>Erbjudanden</button>
+<button type="button" data-tab="pantry">
+<svg class="icon" aria-hidden="true">
+<use href="#i-box">
+</use>
+</svg>Hemma</button>
+<button id="openScanner" type="button">
+<svg class="icon" aria-hidden="true">
+<use href="#i-camera">
+</use>
+</svg>Skanna EAN</button>
+</div>
+</details>
+</div>
+</header>
+<main id="main">
+<div class="page-heading">
+<div>
+<div id="pageEyebrow" class="eyebrow">VECKANS MIDDAGAR</div>
+<h1 id="pageTitle">Veckans middagar</h1>
+<p id="pageDescription">Sju middagar som passar er, med färdig inköpslista och koll på matbudgeten.</p>
+<p id="syncStatus" class="sync-status" role="status" aria-live="polite">Hämtar dina sparade val …</p>
+<div class="sync-actions">
+<button id="reloadState" class="text-button" type="button" hidden>Hämta senaste val</button>
+<button id="retrySave" class="text-button" type="button" hidden>Spara igen</button>
+</div>
+</div>
+<div class="page-actions" id="planActions">
+<button id="generate" type="button" class="secondary">
+<svg class="icon" aria-hidden="true">
+<use href="#i-refresh">
+</use>
+</svg>Föreslå ny vecka</button>
+<button type="button" data-tab="shop">Inköpslista <svg class="icon" aria-hidden="true">
+<use href="#i-arrow">
+</use>
+</svg>
+</button>
+</div>
+<div class="page-actions" id="shopActions" hidden>
+<button id="download" type="button" class="secondary">
+<svg class="icon" aria-hidden="true">
+<use href="#i-mail">
+</use>
+</svg>Spara / dela listan</button>
+<button id="clearShopping" type="button" class="secondary">
+<svg class="icon" aria-hidden="true">
+<use href="#i-trash">
+</use>
+</svg>Rensa markeringar</button>
+</div>
+</div>
+<form id="appSearchForm" class="app-search legacy-search" hidden role="search" aria-label="Sök i receptbanken">
+<label for="appSearch">Sök rätter och ingredienser</label>
+<div class="search-controls">
+<input id="appSearch" type="search" maxlength="120" enterkeyhint="search" placeholder="Rätt eller ingrediens" aria-describedby="appSearchHelp">
+<button type="submit">🔎 Sök</button>
+<button id="clearAppSearch" class="secondary" type="button" hidden>Rensa</button>
+</div>
+<p id="appSearchHelp" class="muted">Sök bland 500 recept. Dina val för fläskkött, fisk och skaldjur gäller även här.</p>
+</form>
+<section id="plan">
+<div id="weekStats" class="stats-grid" aria-label="Veckans kostnad och portioner">
+</div>
+<section class="settings plan-settings" aria-label="Dina matval">
+<div class="setting-cell">
+<label class="setting-label" for="people">Vid bordet</label>
+<div class="stepper">
+<button type="button" data-step-target="people" data-step="-1" aria-label="Färre vid bordet">−</button>
+<input id="people" type="number" min="1" max="6" value="4" aria-label="Personer">
+<button type="button" data-step-target="people" data-step="1" aria-label="Fler vid bordet">+</button>
+</div>
+<small id="peopleHelp">38 portioner totalt</small>
+</div>
+<div class="setting-cell">
+<label class="setting-label" for="boxes">Matlådor</label>
+<div class="stepper">
+<button type="button" data-step-target="boxes" data-step="-1" aria-label="Färre matlådor">−</button>
+<input id="boxes" type="number" min="0" max="6" value="2" aria-label="Matlådor per vardag">
+<button type="button" data-step-target="boxes" data-step="1" aria-label="Fler matlådor">+</button>
+</div>
+<small id="boxesHelp">Mån–fre</small>
+</div>
+<div class="setting-cell">
+<label class="setting-label" for="diet">Kosthållning</label>
+<select id="diet">
+<option value="Allt">Allt – blandat</option>
+<option>Vegetariskt</option>
+<option>Kyckling</option>
+<option>Kött</option>
+<option value="Fläskkött">Fläskkött</option>
+<option>Nötkött</option>
+<option>Fisk</option>
+</select>
+<small>Nya förslag följer ditt val</small>
+</div>
+<div class="setting-cell">
+<span class="setting-label">Undvik</span>
+<details class="avoid-menu" id="avoidMenu">
+<summary>
+<span id="avoidSummary">Skaldjur</span>
+<svg class="icon" aria-hidden="true">
+<use href="#i-chevron">
+</use>
+</svg>
+</summary>
+<div class="avoid-panel">
+<p>Bocka för det du vill välja bort. Veckan och inköpslistan anpassas.</p>
+<label>
+<input id="excludeShellfish" type="checkbox" checked>Skaldjur</label>
+<label>
+<input id="excludePork" type="checkbox">Fläskkött</label>
+<label>
+<input id="excludeNuts" type="checkbox">Nötter &amp; mandel</label>
+<label>
+<input id="excludeFish" type="checkbox">Fisk</label>
+<label>
+<input id="excludeEggs" type="checkbox">Ägg</label>
+<label>
+<input id="excludeDairy" type="checkbox">Mjölkprodukter</label>
+<label>
+<input id="excludeGluten" type="checkbox">Gluten</label>
+<label>
+<input id="excludeSoy" type="checkbox">Soja</label>
+<label>
+<input id="excludeOnion" type="checkbox">Lök</label>
+<p class="preference-help">Matpreferenser, inte allergifilter. Kontrollera alltid originalrecept och förpackningar. Nötvalet omfattar även jordnötter och pinjenötter. Lök omfattar även vitlök, purjo och gräslök.</p>
+<label class="fish-limit" for="maxFish">Fiskmiddagar per vecka<select id="maxFish">
+<option value="0">Ingen fisk</option>
+<option value="1" selected>Högst 1</option>
+<option value="2">Högst 2</option>
+<option value="7">Obegränsat</option>
+</select>
+</label>
+<p id="porkHelp">Fläskvalet omfattar även bacon, skinka, blandfärs och köttprodukter med ospecificerat köttslag.</p>
+</div>
+</details>
+<small>Bortval gäller hela appen</small>
+</div>
+</section>
+<div class="week-section-head">
+<div>
+<h2>Veckans rätter</h2>
+<p>Tryck på en dag för att byta rätt, eller på namnet för att se receptet.</p>
+</div>
+<div class="category-legend">
+<span class="cat-veg">Vegetariskt</span>
+<span class="cat-chicken">Kyckling</span>
+<span class="cat-meat">Kött</span>
+<span class="cat-fish">Fisk</span>
+</div>
+</div>
+<div id="weekStrip" class="week-strip" aria-label="Välj dag">
+</div>
+<div id="days" class="days week-cards">
+</div>
+<div class="shopping-ready">
+<div>
+<h3>Inköpslistan är redo</h3>
+<p id="readySummary">
+</p>
+</div>
+<button type="button" data-tab="shop" class="secondary">Öppna inköpslistan <svg class="icon" aria-hidden="true">
+<use href="#i-arrow">
+</use>
+</svg>
+</button>
+</div>
+</section>
+<section id="shop" hidden>
+<div id="shopStats" class="shop-summary" aria-label="Sammanfattning av inköpslistan">
+</div>
+<div class="shopping-tools">
+<label class="staples-toggle">
+<input id="includeStaples" type="checkbox">Visa även basvaror</label>
+<button id="selectAllShopping" class="secondary" type="button">Markera alla att köpa</button>
+<span class="muted">Cirkeln väljer varor till delning. Hemikonen markerar det du redan har.</span>
+</div>
+<p id="budgetShop" class="budget-shop">
+</p>
+<div id="shopping">
+</div>
+<form id="extraForm" class="custom">
+<label for="extra">Lägg till egen vara<input id="extra" maxlength="100" placeholder="Till exempel kaffe">
+</label>
+<button id="add" type="button" class="secondary">Lägg till</button>
+</form>
+</section>
+<section id="bank" hidden>
+<form id="recipeSearchForm" class="recipe-filters" role="search" aria-label="Sök och filtrera recept">
+<div class="bank-search-line">
+<label class="search-box" for="recipeSearch">
+<svg class="icon" aria-hidden="true">
+<use href="#i-search">
+</use>
+</svg>
+<span class="sr-only">Sök recept eller ingrediens</span>
+<input id="recipeSearch" type="search" maxlength="120" enterkeyhint="search" placeholder="Sök rätt eller ingrediens, t.ex. kyckling">
+<button type="submit" class="sr-only">Sök recept</button>
+</label>
+<label class="dinner-toggle">
+<input id="dinnerOnly" type="checkbox" checked>
+<span class="switch" aria-hidden="true">
+</span>Bara middagsrätter</label>
+</div>
+<div class="bank-filter-line">
+<div class="category-chips" role="group" aria-label="Kategori">
+<button type="button" class="category-chip active" data-bank-category="" aria-pressed="true">Alla</button>
+<button type="button" class="category-chip " data-bank-category="Vegetariskt" aria-pressed="false">Vegetariskt</button>
+<button type="button" class="category-chip " data-bank-category="Kyckling" aria-pressed="false">Kyckling</button>
+<button type="button" class="category-chip " data-bank-category="Kött" aria-pressed="false">Kött</button>
+<button type="button" class="category-chip " data-bank-category="Fläskkött" aria-pressed="false">Fläskkött</button>
+<button type="button" class="category-chip " data-bank-category="Nötkött" aria-pressed="false">Nötkött</button>
+<button type="button" class="category-chip " data-bank-category="Fisk" aria-pressed="false">Fisk</button>
+</div>
+<label class="source-filter" for="recipeSource">
+<span class="sr-only">Källa</span>
+<select id="recipeSource">
+<option value="">Alla källor</option>
+<option>ICA</option>
+<option>Köket.se</option>
+<option>Arla</option>
+</select>
+</label>
+</div>
+<label class="sr-only" for="recipeCategory">Kategori<select id="recipeCategory" tabindex="-1">
+<option value="">Alla kategorier</option>
+<option>Vegetariskt</option>
+<option>Kyckling</option>
+<option>Kött</option>
+<option value="Fläskkött">Fläskkött</option>
+<option>Nötkött</option>
+<option>Fisk</option>
+</select>
+</label>
+</form>
+<div class="bank-result-line">
+<p id="bankcount" role="status" aria-live="polite" tabindex="-1">
+</p>
+<button id="clearRecipeSearch" class="text-button" type="button" hidden>Rensa sökning</button>
+</div>
+<div id="bankresults" class="recipe-grid">
+</div>
+<button id="moreRecipes" type="button" class="secondary load-more">Visa fler recept</button>
+</section>
+<section id="deals" hidden>
+<h2>Erbjudanden till din mat</h2>
+<section class="locationbox" aria-label="Välj butiker">
+<h3>Var handlar du?</h3>
+<div class="locationbuttons">
+<button id="nearMe" type="button">⌖ Nära mig</button>
+<button id="usualStores" class="secondary" type="button">Mina vanliga butiker</button>
+</div>
+<form id="townForm" class="townform">
+<label for="townName">Välj ort manuellt<input id="townName" placeholder="Luleå, Göteborg …" maxlength="80" required minlength="2">
+</label>
+<button type="submit">Sök ort</button>
+</form>
+<label>Sökområde<select id="storeRadius">
+<option value="5">5 km</option>
+<option value="15" selected>15 km</option>
+<option value="30">30 km</option>
+</select>
+</label>
+<p id="locationStatus" role="status" aria-live="polite">
+</p>
+<div id="townChoices">
+</div>
+<div id="nearbyStores">
+</div>
+<p class="muted">Platsen hämtas bara när du trycker på Nära mig. Ungefärliga koordinater skickas till OpenStreetMaps butikssökning. Ortsökning använder Open-Meteo. Ingen löpande platsspårning.</p>
+</section>
+<div id="usualDeals">
+<p> Välj en middag för att bara visa erbjudanden som passar den.</p>
+<p class="muted">Kontrollera aktuella erbjudanden och villkor hos respektive butik. Endast reklambladens priser visas. Besparing jämförs med källans ordinarie pris för samma vara, inte med uppskattade matpriser.</p>
+<div class="offer-controls">
+<label>Erbjudanden till<select id="dealDay">
+</select>
+</label>
+<button id="refreshOffers" type="button">Uppdatera erbjudanden</button>
+<p id="offersStatus" role="status">
+</p>
+<label>
+<input id="lidlMember" type="checkbox">Jag har Lidl Plus</label>
+<label>
+<input id="icaMember" type="checkbox">Jag är ICA Stammis</label>
+<label>Handlingsdatum<input id="shopdate" type="date">
+</label>
+</div>
+<div id="savingsSummary" class="stat" style="margin-top:20px">
+</div>
+<div id="dealresults">
+</div>
+<h3>Dina fem butiker</h3>
+<div id="storelinks">
+</div>
+</div>
+</section>
+<section id="pasta" hidden>
+<h2>Pastamiddagar</h2>
+<label>Sök pastarätt<input id="pastaSearch" type="search" placeholder="Till exempel lasagne">
+</label>
+<p id="pastaCount">
+</p>
+<p>Pastarätter från receptbanken, med dina matval.</p>
+<div id="pastaresults" class="days">
+</div>
+</section>
+<section id="pantry" hidden>
+<div class="sectionhead">
+<h2>Det finns hemma</h2>
+<button id="scanFromPantry">📷 Skanna en vara</button>
+</div>
+<p>Mängden i ditt lager dras av från inköpslistan. Koppla varan till samma ingrediens som i receptet.</p>
+<form id="pantryForm">
+<label>Vara<input id="pantryName" required maxlength="160" placeholder="Till exempel pasta">
+</label>
+<label>Sök ingrediens<input id="pantrySearch" type="search" placeholder="Till exempel pasta eller kyckling">
+</label>
+<label>Ingrediens i recepten<select id="pantryIngredient" required>
+</select>
+</label>
+<div class="bankfilters">
+<label>Mängd totalt<input id="pantryAmount" type="number" min="0.001" max="100000" step="any" value="1" required>
+</label>
+<label>Enhet<span id="pantryUnit">st</span>
+</label>
+</div>
+<p id="productInfo" role="status">
+</p>
+<button type="submit">Spara i hemmalagret</button>
+</form>
+<div id="pantryitems">
+</div>
+<p class="muted">Lager minskas när du själv ändrar mängd eller tar bort en vara. Matlagning gör inget automatiskt uttag.</p>
+</section>
+<section id="budget" hidden>
+<div id="budgetSummary" class="budget-summary">
+</div>
+<div class="budget-settings">
+<label for="budgetLimit">Veckobudget, kr<input id="budgetLimit" type="number" inputmode="decimal" min="0" max="50000" step="0.01" value="1200">
+</label>
+</div>
+<h2>Budget och varupriser</h2>
+<p>Vanliga ingredienser får automatiskt riktpriser från sparade jämförelseprodukter hos Mathem. Du kan ändra varje pris. Dina egna priser har alltid företräde. Receptmängder, personer och matlådor räknas med automatiskt. Budgeten jämförs med inköpsbehovet efter avdrag för hemmalagret, oavsett ”Ska köpa”-markeringar.</p>
+<p class="muted">Riktpriserna är uppskattningar för matplanering, inte garanterade priser i din butik. Varje automatiskt pris har en länk till sin jämförelseprodukt. Dina ändringar sparas i det valda lagringsläget. Reklambladspriser visas separat under Erbjudanden. Inköpen räknas för den mängd som används; hela förpackningar kan kosta mer. Basvaror tas med när ”Visa även basvaror” är valt i inköpslistan.</p>
+<p class="muted">När mängden saknas i originalreceptet visas ett riktpris som hjälp, men du anger kostnaden för hela veckan själv. Även egna varor får ett veckobelopp. Justera dessa belopp själv när du ändrar portioner.</p>
+<label>Sök bland veckans varor<input id="priceSearch" type="search" placeholder="Till exempel pasta">
+</label>
+<p id="priceCount" role="status">
+</p>
+<div id="priceRows">
+</div>
+</section>
+<footer>500 recept från ICA, Köket.se och Arla.<br>
+<span id="storage">Veckoplan, inköpsval, budget och hemmalager sparas i den här webbläsaren.</span>
+<details class="local-backup">
+<summary>Säkerhetskopia av dina val</summary>
+<p>Spara eller återställ veckoplan, budget, egna priser, inköpsval och hemmalager.</p>
+<div class="exportactions">
+<button id="exportBackup" type="button" class="secondary">Spara säkerhetskopia</button>
+<label class="backup-upload">Återställ säkerhetskopia<input id="importBackup" type="file" accept="application/json,.json">
+</label>
+</div>
+<p id="backupStatus" role="status">
+</p>
+</details>
+</footer>
+</main>
+<dialog id="recipe">
+<div id="recipebody">
+</div>
+<div id="assignRecipe" hidden>
+<label>Lägg in på dagen<select id="assignDay">
+<option value="0">Måndag</option>
+<option value="1">Tisdag</option>
+<option value="2">Onsdag</option>
+<option value="3">Torsdag</option>
+<option value="4">Fredag</option>
+<option value="5">Lördag</option>
+<option value="6">Söndag</option>
+</select>
+</label>
+<button id="assignButton">Välj till veckoplan</button>
+</div>
+<button id="close">Stäng recept</button>
+</dialog>
+<dialog id="exportList">
+<h2 id="exportTitle">Inköpslista</h2>
+<p>Välj Anteckningar, Google Keep eller en annan app i telefonens delningsmeny. Rutorna i den delade texten är symboler. För tryckbara kryssrutor behöver du aktivera checklista i anteckningsappen. I Middagskollen väljer du först varorna med ”Ska köpa”. Alla rutor i den exporterade listan är tomma så att du kan bocka av under handlingen.</p>
+<label for="exportText">Din kategoriserade lista</label>
+<textarea id="exportText" readonly rows="12">
+</textarea>
+<div class="exportactions">
+<button id="shareAgain" type="button">Dela till en app</button>
+<button id="copyList" class="secondary" type="button">Kopiera listan</button>
+<button id="saveListFile" class="secondary" type="button">Ladda ned textfil</button>
+<button id="closeExport" class="secondary" type="button">Stäng</button>
+</div>
+<p id="exportStatus" role="status">
+</p>
+</dialog>
+<dialog id="scanner">
+<div class="sectionhead">
+<h2>📷 Skanna EAN</h2>
+<button id="closeScanner" class="secondary" type="button">🏠 Till middagen</button>
+</div>
+<p>Rikta bakkameran mot streckkoden. Håll hela koden i bilden och undvik reflexer.</p>
+<div class="camera">
+<video id="scanVideo" muted playsinline autoplay>
+</video>
+<div class="scanFrame">
+</div>
+</div>
+<p id="scanStatus" role="status" aria-live="polite">
+</p>
+<button id="startCamera" type="button">📷 Starta kameran</button>
+<form id="eanForm">
+<label>EAN-kod<input id="eanCode" inputmode="numeric" pattern="[0-9]{8}|[0-9]{12}|[0-9]{13}" required placeholder="8, 12 eller 13 siffror">
+</label>
+<button type="submit">Sök vara</button>
+</form>
+<p class="muted">Kamerabilder stannar i telefonen. Bara den avlästa EAN-koden skickas till Open Food Facts. Saknas produkten kan du lägga till den själv.</p>
+</dialog>
+<dialog id="dayPicker" class="day-picker-dialog" aria-labelledby="pickerTitle">
+<div class="sectionhead">
+<div>
+<span class="eyebrow">VÄLJ MIDDAG</span>
+<h2 id="pickerTitle">Byt rätt</h2>
+</div>
+<button id="closePicker" type="button" class="icon-button" aria-label="Stäng val av middag">
+<svg class="icon" aria-hidden="true">
+<use href="#i-close">
+</use>
+</svg>
+</button>
+</div>
+<label class="search-box" for="pickerSearch">
+<svg class="icon" aria-hidden="true">
+<use href="#i-search">
+</use>
+</svg>
+<span class="sr-only">Sök middag att välja</span>
+<input id="pickerSearch" type="search" placeholder="Sök rätt eller ingrediens">
+</label>
+<p id="pickerCount" role="status">
+</p>
+<div id="pickerResults" class="picker-results">
+</div>
+</dialog>
+<div id="toast" role="status" aria-live="polite">
+</div>
+<script src="ui/runtime.js" data-runtime="server">
+</script>
+<script src="ui/scanner-lib.js">
+</script>
+<script src="ui/data.js">
+</script>
+<script src="ui/offers.js">
+</script>
+<script src="ui/shopping.js">
+</script>
+<script src="ui/preferences.js">
+</script>
+<script src="ui/core.js">
+</script>
+<script src="ui/search.js">
+</script>
+<script src="ui/app.js">
+</script>
+<script src="ui/price-data.js">
+</script>
+<script src="ui/price-book.js">
+</script>
+<script src="ui/budget.js">
+</script>
+<script src="ui/layout-model.js">
+</script>
+<script src="ui/studio.js">
+</script>
+<script src="ui/location.js">
+</script>
+<script src="ui/phone.js">
+</script>
+<script src="ui/pantry.js">
+</script>
+<script src="ui/sync.js">
+</script>
+<script src="ui/local-backup.js">
+</script>
+</body>
+</html>

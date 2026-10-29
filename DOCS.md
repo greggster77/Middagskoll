@@ -1,6 +1,6 @@
 # Middagskollen – lokal drift
 
-Läs först `LAS-MIG-FORST.md` i ZIP-filens rot. Kopiera hela denna mapp till Home Assistants lokala appmapp och installera den från app-/tilläggsbutiken.
+Kopiera hela detta projekt till Home Assistants lokala appmapp och installera det från app-/tilläggsbutiken.
 
 ## Kör samma app utan Home Assistant Supervisor
 
@@ -34,7 +34,27 @@ Alla lokala resurs- och API-adresser är relativa. Det gör att de fungerar unde
 
 Filerna i `public/` är färdiga och kräver inget frontendbygge. `scanner-lib.js` är lokalt paketerad ZXing-kod; licenser finns i `licenses/`. Inga bilder från originalrecepten laddas ned i paketet; de hämtas vid behov från respektive källa, som tidigare.
 
+## Filstruktur
+
+| Sökväg | Innehåll |
+| --- | --- |
+| `public/index.html` | Startsidan som servern visar. |
+| `public/ui/` | Den aktuella exportens gränssnitt, receptdata och stilar, utflyttade ur HTML-filen i ursprunglig laddningsordning. Gör designändringar här. |
+| `public/*.js`, `public/style.css` | Tidigare separata klientmoduler som fortfarande används av befintliga modultester. Startsidan laddar i stället `public/ui/`; versionerna har inte slagits ihop eller tagits bort. |
+| `worker/` | API-hanterare och butikskopplingar som importeras av `server.mjs`. |
+| `tests/`, `scripts/` | Automatiska tester och kodkontroll. |
+| `licenses/` | Licenstexter för ZXing och dess beroenden. |
+| `src/schema.ts`, `drizzle/` | Befintlig databasdefinition och migrationshistorik. Den lokala servern skapar sin SQLite-tabell själv. |
+| `archive/indexfil.html` | Separat tidrapporteringsapp, bevarad men inte publicerad av servern. |
+| `.gitignore`, `.dockerignore` | Undantag för bland annat databaser, beroenden och Git-filer; tidigare felbenämnda `download`-filer. |
+
+Endast `public/` är åtkomlig via webben. Servern, startdata, testfiler, databasdefinitioner och arkivet ska ligga utanför den mappen. Startsidan laddar externa skript från samma server för att följa dess befintliga Content Security Policy. `data-runtime="server"` aktiverar API-sparning i SQLite i stället för HTML-exportens webbläsarlagring. Befintliga webbläsarval importeras inte automatiskt; exportera en säkerhetskopia från den gamla versionen och återställ den i serverversionen vid behov.
+
 ## Tester
+
+Menyn **Undvik** stöder även nötter och mandel (inklusive jord- och pinjenötter), ägg, mjölkprodukter, gluten, soja och lök (inklusive vitlök, purjo och gräslök). Valen filtrerar receptens ingrediensnamn och anteckningar och uppdaterar veckoplan, receptsökning och inköpsbehov. Valen sparas och följer med säkerhetskopior; äldre kopior har de nya bortvalen avstängda. En kombination utan passande middagar avvisas med ett meddelande och föregående val behålls.
+
+Detta är matpreferenser, **inte allergifilter**. Sammansatta produkter och spår av allergener kan inte bedömas säkert från receptnamnen. Kontrollera alltid originalrecept och förpackningar. Recept med alternativa eller valfria ingredienser filtreras också när ett bortval matchar; appen skriver inte om originalrecept.
 
 ```sh
 npm test
