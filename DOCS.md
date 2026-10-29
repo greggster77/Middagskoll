@@ -1,4 +1,20 @@
-# Middagskollen – lokal drift
+# Middagskollen – webb och lokal drift
+
+## Offentlig webbversion
+
+Öppna **https://greggster77.github.io/Middagskoll/**. Inget konto eller Home Assistant behövs. Varje besökare har egna val i sin webbläsare; ingen gemensam hushållsdatabas används. Valen delas mellan flikar på samma webbplats, men inte mellan webbläsare eller enheter. Säkerhetskopiera för att flytta eller skydda dem innan webbläsardata rensas.
+
+Bygg webbversionen med Node.js 24 eller senare:
+
+```sh
+npm run build:web
+```
+
+Endast innehållet i `.web-dist/` ska publiceras. Bygget väljer webbläsarlagring, bevarar relativa resursadresser och inkluderar tredjepartslicenser. Det tar inte med server, startdata, testfiler, arkiv eller databas. `.web-dist/` är genererad och ersätts vid nästa bygge. För GitHub Pages ligger de färdiga webbplatsfilerna på grenen `gh-pages`; Pages ska använda den grenens rot (`/`). Ändringar i kodgrenarna visas inte automatiskt på webbplatsen: ett nytt webbbygge måste publiceras till `gh-pages`.
+
+Receptsökning, veckoplan, matpreferenser, inköpslista, budget, hemmalager och säkerhetskopior fungerar utan backend. Automatisk uppdatering av butikserbjudanden kräver serverversionen; webbversionen länkar till butikernas reklamblad. EAN-sökning skickar enbart streckkoden direkt till Open Food Facts och kräver nätåtkomst; kamera och plats kräver webbläsartillstånd och HTTPS. Riktpriser är sparade uppskattningar, inte livepriser.
+
+## Installation i Home Assistant
 
 Kopiera hela detta projekt till Home Assistants lokala appmapp och installera det från app-/tilläggsbutiken.
 

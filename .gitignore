@@ -3,3 +3,4 @@ data/
 .preview-data/
 .sites-runtime/
 *.sqlite*
+.web-dist/
