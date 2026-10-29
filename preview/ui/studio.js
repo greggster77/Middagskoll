@@ -2,7 +2,7 @@
 const Studio=(()=>{
  const icon=n=>'<svg class="icon" aria-hidden="true"><use href="#i-'+n+'"></use></svg>';
  let pickerDay=0,activeDay=null,lastFishLimit=1;
- const labels={plan:['','Veckans middagar','Sju middagar som passar er, med färdig inköpslista.'],bank:['RECEPTBANK','Alla rätter','500 recept med ingredienser. Sök, filtrera och lägg det du gillar i veckan.'],shop:['','Inköpslista','Allt som veckans middagar kräver, sammanslaget och sorterat efter butiksdel.'],pasta:['RECEPTBANK','Pasta','Hitta en ny pastafavorit och lägg till den i veckoplanen.'],pantry:['HEMMALAGER','Vad finns hemma?','Håll koll på ditt lager och handla det som faktiskt behövs.']};
+ const labels={plan:['','Veckans middagar','Sju middagar som passar er, med färdig inköpslista.'],bank:['RECEPTBANK','Alla rätter',DATA.recipes.length+' recept med ingredienser. Sök, filtrera och lägg det du gillar i veckan.'],shop:['','Inköpslista','Allt som veckans middagar kräver, sammanslaget och sorterat efter butiksdel.'],pasta:['RECEPTBANK','Pasta','Hitta en ny pastafavorit och lägg till den i veckoplanen.'],pantry:['HEMMALAGER','Vad finns hemma?','Håll koll på ditt lager och handla det som faktiskt behövs.']};
  function badge(r){return '<span class="category-badge cat-'+LayoutModel.tone(r)+'">'+escape(r.cat)+'</span>';}
  function tabChanged(tab){
   const l=labels[tab]||(tab==='budget'?['','Budget','Visa endast matchande ICA-erbjudanden; totalsumman visas när prisunderlaget räcker.']:labels.plan),w=LayoutModel.weekInfo();
